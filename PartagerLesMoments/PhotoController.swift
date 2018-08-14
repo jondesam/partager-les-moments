@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PhotoController: UIViewController {
+class PhotoController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
 
     @IBOutlet weak var partagerButton: UIBarButtonItem!
     
@@ -17,6 +17,7 @@ class PhotoController: UIViewController {
     @IBOutlet weak var texteAPartager: UITextView!
     
     let texteVide = "Entrez un Texte..."
+    var imagePicker : UIImagePickerController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,29 @@ class PhotoController: UIViewController {
         photoAPartager.addGestureRecognizer(tap)
         
         texteAPartager.text = texteVide
+        
+        imagePicker = UIImagePickerController()
+        imagePicker?.delegate = self
+        imagePicker?.allowsEditing = true
+        
+        
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        imagePicker?.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        var image: UIImage?
+        
+        if let editee = info[UIImagePickerControllerEditedImage] as? UIImage{
+            image = editee
+        } else if let original = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            image = original
+        }
+        photoAPartager.image = image
+        imagePicker?.dismiss(animated: true, completion: nil)
+        
     }
     
     @objc func prendrePhoto(){
