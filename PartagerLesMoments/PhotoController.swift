@@ -11,9 +11,7 @@ import UIKit
 class PhotoController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
 
     @IBOutlet weak var partagerButton: UIBarButtonItem!
-    
     @IBOutlet weak var photoAPartager: UIImageView!
-    
     @IBOutlet weak var texteAPartager: UITextView!
     
     let texteVide = "Entrez un Texte..."
@@ -21,7 +19,6 @@ class PhotoController: UIViewController, UIImagePickerControllerDelegate,UINavig
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
        miseEnPlace()
     }
     
@@ -59,9 +56,41 @@ class PhotoController: UIViewController, UIImagePickerControllerDelegate,UINavig
     }
     
     @objc func prendrePhoto(){
+        guard imagePicker != nil else {return}
         
+        let alerte = UIAlertController(title: "Prendre photo?", message: "Choisir le média", preferredStyle: .actionSheet)
+        
+        let apprareil = UIAlertAction(title: "Appareil photo", style: .default) { (act) in
+            if UIImagePickerController.isSourceTypeAvailable(.camera){
+                self.imagePicker?.sourceType = .camera
+                self.present(self.imagePicker!, animated: true, completion: nil)
+            }
+        }
+        
+        let librairie = UIAlertAction(title: "Librairie photo", style: .default) { (act) in
+                self.imagePicker?.sourceType = .photoLibrary
+                self.present(self.imagePicker!, animated: true, completion: nil)
+        }
+        
+        let annuler = UIAlertAction(title: "Annuler", style: .cancel, handler: nil)
+        
+        alerte.addAction(apprareil)
+        alerte.addAction(librairie)
+        alerte.addAction(annuler)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if let pop = alerte.popoverPresentationController {
+                pop.sourceView = self.view
+                pop.sourceRect = CGRect(x: self.view.frame.midX, y: self.view.frame.midY, width: 0, height: 0)
+                pop.permittedArrowDirections = []
+            }
+            
+        }
+        self.present(alerte, animated: true, completion: nil)
     }
 
+    
+    
     @IBAction func boutonPartageAppute(_ sender: Any) {
     }
     
