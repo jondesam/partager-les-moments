@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PhotoController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class PhotoController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate, UITextViewDelegate {
 
     @IBOutlet weak var partagerButton: UIBarButtonItem!
     @IBOutlet weak var photoAPartager: UIImageView!
@@ -34,6 +34,7 @@ class PhotoController: UIViewController, UIImagePickerControllerDelegate,UINavig
         imagePicker = UIImagePickerController()
         imagePicker?.delegate = self
         imagePicker?.allowsEditing = true
+        texteAPartager.delegate = self
         
         
     }
@@ -53,6 +54,12 @@ class PhotoController: UIViewController, UIImagePickerControllerDelegate,UINavig
         photoAPartager.image = image
         imagePicker?.dismiss(animated: true, completion: nil)
         
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == texteVide {
+            textView.text = ""
+        }
     }
     
     @objc func prendrePhoto(){
